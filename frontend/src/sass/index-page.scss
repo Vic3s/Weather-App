@@ -1,0 +1,137 @@
+.search-container {
+    position: relative;
+}
+
+.search-input {
+    height: 50px;
+    border-radius: 30px;
+    padding-left: 35px;
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: #888;
+}
+
+
+.main-content{
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+
+    .heading-main{
+        text-align: center;
+    }
+    .weather-section{
+        margin: auto;
+        width: 900px;
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        align-items: center;
+        justify-content: center;
+
+        .weather-info-current{
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+
+            .current-deg{
+                display: flex;
+                gap: 15px;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                
+                h1{
+                    font-size: 65px;
+                }
+
+                .celcius-fahrenheit{
+                    font-size: 25px;
+                    display: flex;
+                    flex-direction: row;
+                    gap: 7px;
+
+                    .celcius{
+                        &:hover{
+                            cursor: pointer;
+                            color: rgb(146, 146, 146)
+                        }
+                    }
+                    .fahrenheit{
+                        &:hover{
+                            cursor: pointer;
+                            color: rgb(146, 146, 146)
+                        }
+                    }
+                }
+                .weather-sub-data{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+
+                    p{
+                        margin: 0px;
+                    }
+                }
+            }
+
+            .current-time-condition{
+                display: flex;
+                flex-direction: column;
+            }
+        }
+        .hourly-deg-chart{
+            width: 100%;
+            .hours-of-day{
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
+        
+        .hourly-deg-current{
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            .card-day{
+                width: 100px;
+                height: 120px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 20px;
+
+                .deg-range{
+                    display: flex;
+                    flex-direction: row;
+                    gap: 5px;
+
+                    .deg-lo{
+                        color: #888;
+                    }
+                }
+            }
+
+            .card-day-active{
+                border-radius: 20px;
+                background-color: rgb(235, 235, 235);
+            }
+        }
+    }
+
+}
+
+
+
