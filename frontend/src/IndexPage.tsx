@@ -12,16 +12,13 @@ const IndexPage = () => {
 
 
   const postWeatherForcastCity = () => {
-    axios({
-      method: 'post',
-      url: 'http://localhost:5000/post-city-name',
-      data: {
-        'city-name': cityName,
-      }
-    }).then(response => setCityCourdinates(response.data))
+    const data = {
+      'cityName': cityName,
+    }
+    axios.post('http://localhost:5000/api/post-city-name', data)
+    .then(response => setCityCourdinates(response.data))
   }
 
-  postWeatherForcastCity();
 
   return (
     <>
@@ -51,9 +48,9 @@ const IndexPage = () => {
 
         <WeatherInfoCurrent />
         
-        <HourlyDegChart />
+        {/* <HourlyDegChart />
 
-        <WeeklyDegCurrent />
+        <WeeklyDegCurrent /> */}
         
       </div>
     

@@ -18,13 +18,16 @@ const WeatherInfoCurrent = () => {
   const getCurrentTimeWeather = () => {
     axios({
       method: 'get',
-      url: 'http://localhost:5000/api/curr-time-weather'
+      url: 'http://localhost:5000/api/curr-time-weather',
+      headers: {
+        'Content-Type': 'application/json',
+      }
     }).then(response => setCurrWeatherData(response.data))
   }
 
   useEffect(() => {
     getCurrentTimeWeather();
-  })
+  }, [])
 
     return (
         <div className='weather-info-current'>
