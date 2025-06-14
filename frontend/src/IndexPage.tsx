@@ -48,9 +48,9 @@ const IndexPage = () => {
 
         <WeatherInfoCurrent />
         
-        {/* <HourlyDegChart />
+        <HourlyDegChart />
 
-        <WeeklyDegCurrent /> */}
+        <WeeklyDegCurrent />
         
       </div>
     
