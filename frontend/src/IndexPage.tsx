@@ -8,16 +8,24 @@ import WeeklyDegCurrent from './WeeklyDegCurrent'
 const IndexPage = () => {
 
   const[cityName, setCityName] = useState('')
-  const[cityCourdinates, setCityCourdinates] = useState({})
 
 
-  const postWeatherForcastCity = () => {
+  const postWeatherForcastCity = (e: any) => {
+
+    e.preventDefault();
     const data = {
       'cityName': cityName,
     }
-    axios.post('http://localhost:5000/api/post-city-name', data)
-    .then(response => setCityCourdinates(response.data))
+    axios.post('http://localhost:5000/api/post-city-name', data,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+    .then(response => setCityName(response.data))
+    .catch(err => console.log(err));
   }
+
 
 
   return (
@@ -27,7 +35,7 @@ const IndexPage = () => {
         <h1>Weather Forcast</h1>
       </div>
 
-      <form>
+      <form onSubmit={postWeatherForcastCity}>
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-md-6">
@@ -48,9 +56,9 @@ const IndexPage = () => {
 
         <WeatherInfoCurrent />
         
-        <HourlyDegChart />
+        {/* <HourlyDegChart />
 
-        <WeeklyDegCurrent />
+        <WeeklyDegCurrent /> */}
         
       </div>
     

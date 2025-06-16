@@ -9,7 +9,8 @@ const WeatherInfoCurrent = () => {
     humidity: string,
     wind: string,
     dow: string,
-    time: number, 
+    time: number,
+    condition: string
   }
 
   const[currWeatherData, setCurrWeatherData] = useState<WeatherDataType>(Object)
@@ -38,13 +39,14 @@ const WeatherInfoCurrent = () => {
               <p className='fahrenheit'>F°</p>
             </div>
             <div className='weather-sub-data'>
-              <p className='rain'><b>Rain:</b> {currWeatherData.rain}%</p>
+              <p className='rain'><b>Rain:</b> {currWeatherData.rain} mm</p>
               <p className='humidity'><b>Humidity:</b> {currWeatherData.humidity}%</p>
               <p className='wind'><b>Wind:</b> {currWeatherData.wind} km/h</p>
             </div>
           </div>
           <div className='current-time-condition'>
             <h3 className='day-time'>{`${currWeatherData.dow}, ${currWeatherData.time}`}</h3>
+            <h2>{currWeatherData.condition}</h2>
           </div>
         </div>
     )
