@@ -1,11 +1,12 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { AreaChart, Area, Tooltip, XAxis, YAxis, LabelList, ResponsiveContainer } from "recharts";
+import { AreaChart, Area, Tooltip, XAxis, LabelList} from "recharts";
 
 const HourlyDegChart = () => {
 
     const[chartData, setChartData] = useState([]);
     const[hoursOfDay, setHoursOfDay] = useState<any[]>([])
+    const[weatherMetric, setWeatherMetric] = useState([])
     
     const getWeatherHourlyData = () => {
         axios({
@@ -45,7 +46,7 @@ const HourlyDegChart = () => {
 
             {hoursOfDay.map((item) => (
 
-                <p className='circular-hours'>{item}</p>
+                <p className='circular-hours'>{item}:00</p>
 
             ))}
         </div>

@@ -68,9 +68,12 @@ public class WeatherData {
         return ResponseEntity.ok(cityName);
     }
     @GetMapping("/curr-time-weather")
-    public ResponseEntity<ObjectNode> getCurrentWeatherInfo() {
+    public ResponseEntity<ArrayList<ObjectNode>> getCurrentWeatherInfo() {
         ObjectMapper mapper = new ObjectMapper();
-        ObjectNode data = mapper.createObjectNode();
+        ArrayList<ObjectNode> response = new ArrayList<>();
+        ObjectNode dataC = mapper.createObjectNode();
+        ObjectNode dataF = mapper.createObjectNode();
+
         //api string
         String URL = "No Specified Value";
         if(getCityName() != null){
@@ -91,7 +94,7 @@ public class WeatherData {
         //Get all raw data needed
         String dayOfWeek = LocalDate.now().getDayOfWeek().toString();
 
-
+        //Create data object for C°
         Integer currTemperature = weatherData.get("temp_c").asInt();
         Double rainMm = weatherData.get("precip_mm").asDouble();
         Integer humidity = weatherData.get("humidity").asInt();
@@ -99,133 +102,151 @@ public class WeatherData {
         String time = weatherData.get("last_updated").asText().split(" ")[1];
         String condition = weatherData.get("condition").get("text").asText();
 
-        //Create response data object
-        data.put("degrees", currTemperature);
-        data.put("rain", rainMm);
-        data.put("humidity", humidity);
-        data.put("wind", windSpeed);
-        data.put("dow", dayOfWeek);
-        data.put("time", time);
-        data.put("condition", condition);
+        dataC.put("degrees", currTemperature);
+        dataC.put("rain", rainMm);
+        dataC.put("humidity", humidity);
+        dataC.put("wind", windSpeed);
+        dataC.put("dow", dayOfWeek);
+        dataC.put("time", time);
+        dataC.put("condition", condition);
 
-        return ResponseEntity.ok(data);
+
+        //Create data object for F°
+        Integer currTemperatureF = weatherData.get("temp_f").asInt();
+
+        dataF.put("degrees", currTemperatureF);
+        dataF.put("rain", rainMm);
+        dataF.put("humidity", humidity);
+        dataF.put("wind", windSpeed);
+        dataF.put("dow", dayOfWeek);
+        dataF.put("time", time);
+        dataF.put("condition", condition);
+
+        response.add(dataC);
+        response.add(dataF);
+
+        return ResponseEntity.ok(response);
     }
 
-//    @GetMapping("/current-hourly-chart-data")
-//    public ResponseEntity<ArrayList<Integer>> ChartData() {
-//        ObjectMapper mapper = new ObjectMapper();
-//        ArrayList<Integer> chartDataList = new ArrayList<>();
-//
-//        //api string
-//        String URL = "No Specified Value";
-//        if(getCityName() != null){
-//            URL = uriDays(getCityName(), 1);
-//        }
-//
-//        WebClient.Builder builder = WebClient.builder();
-//
-//        JsonNode fulldataRequest = builder.build()
-//                .get()
-//                .uri(URL)
-//                .retrieve()
-//                .bodyToMono(JsonNode.class)
-//                .block();
-//
-//
-//        return ResponseEntity.ok(chartDataList);
-//    }
-//
-//    @GetMapping("/current-hours-data")
-//    public ResponseEntity<ArrayList<String>> HourlyChartData() {
-//        ObjectMapper mapper = new ObjectMapper();
-//        ArrayList<String> HoursChartDataList = new ArrayList<>();
-//
-//        //api string
-//        String URL = String.format("%s%s%s", apiURL, uriDay, apiKey);
-//
-//        WebClient.Builder builder = WebClient.builder();
-//
-//        //api call
-//        JsonNode fullDataJson = builder.build()
-//                .get()
-//                .uri(URL)
-//                .retrieve()
-//                .bodyToMono(JsonNode.class)
-//                .block();
-//
-//        String currTime = LocalTime.now().toString().substring(0, 2);
-//
-//        //Needed json data from request
-//        //Getting the time data to map from current hour to the next 7 hours skipping by 3
-//        JsonNode dateTimeJson = fullDataJson.get("data_1h").get("time");
-//
-//        //Mapped json data to array
-//        ArrayList<Object> dateTimeList = this.TranslateToList(dateTimeJson, "");
-//
-//        for (int i = 0; i < dateTimeList.size(); i++) {
-//            String formatedItem = dateTimeList.get(i).toString().split(" ")[1].substring(0, 2);
-//
-//            if (formatedItem.equals(currTime)) {
-//                for (int j = 0; j < 7; j++) {
-//                    HoursChartDataList
-//                            .add(dateTimeList
-//                                    .get(i+j)
-//                                    .toString()
-//                                    .split(" ")[1]);
-//                }
-//                break;
-//            }
-//        }
-//        return ResponseEntity.ok(HoursChartDataList);
-//    }
-//    @GetMapping("next-seven-days-data")
-//    ResponseEntity<ArrayList<ObjectNode>> NextSevenDays(){
-//        ObjectMapper mapper = new ObjectMapper();
-//        ArrayList<ObjectNode> dataList = new ArrayList<>();
-//
-//        WebClient.Builder builder = WebClient.builder();
-//
-//        //full url
-//        String URL = String.format("%s%s%s", apiURL, uriWeek, apiKey);
-//
-//        //api get request
-//        JsonNode fullData = builder.
-//                build()
-//                .get()
-//                .uri(URL)
-//                .retrieve()
-//                .bodyToMono(JsonNode.class)
-//                .block();
-//
-//        //Neaded Data
-//        JsonNode dataDay = fullData.get("data_day");
-//
-//        //Json separate properties
-//        JsonNode daysJson = dataDay.get("time");
-//        JsonNode maxTempJson = dataDay.get("temperature_max");
-//        JsonNode minTempJson = dataDay.get("temperature_min");
-//
-//        //Translate properties in to Java readable format
-//        ArrayList<Object> daysList = TranslateToList(daysJson, "");
-//        ArrayList<Object> maxTempList = TranslateToList(maxTempJson, 0);
-//        ArrayList<Object> minTempList = TranslateToList(minTempJson, 0);
-//
-//        //Format the date to a first two letters of day of the week
-//        ArrayList<String> daysLetters = new ArrayList<>();
-//        for(Object item : daysList){
-//            LocalDate Day = LocalDate.parse(item.toString());
-//            daysLetters.add(Day.getDayOfWeek().toString().substring(0,2));
-//        }
-//
-//        //fill response with data
-//        for(int i=0; i<7; i++){
-//            ObjectNode dataObject = mapper.createObjectNode();
-//            dataObject.put("day", daysLetters.get(i));
-//            dataObject.put("deg_hi", (int)maxTempList.get(i));
-//            dataObject.put("deg_lo", (int)minTempList.get(i));
-//            dataList.add(dataObject);
-//        }
-//
-//        return ResponseEntity.ok(dataList);
-//    }
+    @GetMapping("/current-hourly-chart-data")
+    public ResponseEntity<ArrayList<ObjectNode>> ChartData() {
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayList<ObjectNode> chartDataList = new ArrayList<>();
+
+        //api string
+        String URL = "No Specified Value";
+        if(getCityName() != null){
+            URL = uriDays(getCityName(), 1);
+        }
+
+        WebClient.Builder builder = WebClient.builder();
+
+        JsonNode response = builder.build()
+                .get()
+                .uri(URL)
+                .retrieve()
+                .bodyToMono(JsonNode.class)
+                .block();
+        //get current time as a comparison variable
+        Integer currTime = Integer.parseInt(LocalTime.now().toString().substring(0,2));
+
+        //foreacst for day
+        JsonNode forecastJsonList = response.get("forecast").get("forecastday").get(0).get("hour");
+
+        int index = 0;
+        for(JsonNode node : forecastJsonList){
+            int nodeFiltered = Integer.parseInt(node.get("time").toString().split(" ")[1].substring(0, 2));
+            if( nodeFiltered >= currTime){
+                ObjectNode degNode = mapper.createObjectNode();
+                degNode.put("degrees", (node.get("temp_c").asInt()));
+                chartDataList.add(degNode);
+                index++;
+            }
+            if(index == 7){
+                break;
+            }
+        }
+
+        return ResponseEntity.ok(chartDataList);
+    }
+
+    @GetMapping("/current-hours-data")
+    public ResponseEntity<ArrayList<Integer>> HourlyChartData() {
+        ArrayList<Integer> HoursChartDataList = new ArrayList<>();
+
+        //api string
+        String URL = "No Specified Value";
+        if(getCityName() != null){
+            URL = uriDays(getCityName(), 1);
+        }
+
+        WebClient.Builder builder = WebClient.builder();
+
+        JsonNode response = builder.build()
+                .get()
+                .uri(URL)
+                .retrieve()
+                .bodyToMono(JsonNode.class)
+                .block();
+        //get current time as a comparison variable
+        Integer currTime = Integer.parseInt(LocalTime.now().toString().substring(0,2));
+
+        //foreacst for day
+        JsonNode forecastJsonList = response.get("forecast").get("forecastday").get(0).get("hour");
+
+        int index = 0;
+        for(JsonNode node : forecastJsonList){
+            int nodeFiltered = Integer.parseInt(node.get("time").toString().split(" ")[1].substring(0, 2));
+            if( nodeFiltered >= currTime){
+                HoursChartDataList.add(nodeFiltered);
+                index++;
+            }
+            if(index == 7){
+                break;
+            }
+        }
+        return ResponseEntity.ok(HoursChartDataList);
+    }
+    @GetMapping("next-seven-days-data")
+    ResponseEntity<ArrayList<ObjectNode>> NextSevenDays(){
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayList<ObjectNode> dataList = new ArrayList<>();
+
+        WebClient.Builder builder = WebClient.builder();
+
+        //api string
+        String URL = "No Specified Value";
+        if(getCityName() != null){
+            URL = uriDays(getCityName(), 7);
+        }
+
+        //api get request
+        JsonNode fullData = builder.
+                build()
+                .get()
+                .uri(URL)
+                .retrieve()
+                .bodyToMono(JsonNode.class)
+                .block();
+
+        //Neaded Data
+        JsonNode dataDaysRaw = fullData.get("forecast").get("forecastday");
+
+        //Json separate properties
+        for(JsonNode node: dataDaysRaw){
+            ObjectNode dataNode = mapper.createObjectNode();
+            LocalDate Day = LocalDate.parse(node.get("date").asText());
+            int maxTemp = node.get("day").get("maxtemp_c").asInt();
+            int minTemp = node.get("day").get("mintemp_c").asInt();
+            String weatherIcon = node.get("day").get("condition").get("icon").asText();
+
+            dataNode.put("day", Day.getDayOfWeek().toString().substring(0,2));
+            dataNode.put("maxTemp", maxTemp);
+            dataNode.put("minTemp", minTemp);
+            dataNode.put("weatherIcon", weatherIcon);
+            dataList.add(dataNode);
+        }
+
+        return ResponseEntity.ok(dataList);
+    }
 }

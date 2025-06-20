@@ -1,5 +1,6 @@
 import axios from "axios"
 import { useState, useEffect} from "react"
+import type { WeatherDayShort } from "../aditional/Types";
 
 const WeeklyDegCurrent = () => {
 
@@ -18,13 +19,13 @@ const WeeklyDegCurrent = () => {
 
     return (
         <div className='weekly-deg-current'>
-            {nextWeekData.map((item) => (
+            {nextWeekData.map((item: WeatherDayShort) => (
                 <div className='card-day'>
                 <h4 className='day-of-week'>{item.day}</h4>
-                <i className="fa-solid fa-sun fa-2xl weather-icon"></i>
+                <img src={item.weatherIcon} alt="Weather Condition Icon" />
                 <div className='deg-range'>
-                    <p className='deg-hi'>{item.deg_hi}</p>
-                    <p className='deg-lo'>{item.deg_lo}</p>
+                    <p className='deg-hi'>{item.maxTemp}°</p>
+                    <p className='deg-lo'>{item.minTemp}°</p>
                 </div>
                 </div>
             ))}

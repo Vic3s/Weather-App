@@ -1,14 +1,11 @@
 import axios from 'axios'
 import { useState } from 'react'
 import './styles/index-page.css'
-import WeatherInfoCurrent  from './WeatherInfoCurrent' 
-import HourlyDegChart from './HourlyDegChart'
-import WeeklyDegCurrent from './WeeklyDegCurrent'
+import { WeatherSection } from './components/WeatherSection'
 
 const IndexPage = () => {
 
-  const[cityName, setCityName] = useState('')
-
+  const[cityName, setCityName] = useState("")
 
   const postWeatherForcastCity = (e: any) => {
 
@@ -52,16 +49,8 @@ const IndexPage = () => {
         </div>
       </form>
 
-      <div className='weather-section'>
+        <WeatherSection />
 
-        <WeatherInfoCurrent />
-        
-        {/* <HourlyDegChart />
-
-        <WeeklyDegCurrent /> */}
-        
-      </div>
-    
     </div>
     </>
   )

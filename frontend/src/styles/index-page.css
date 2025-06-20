@@ -87,6 +87,7 @@
   align-items: center;
   justify-content: space-between;
   color: rgb(159, 158, 158);
+  font-weight: bold;
 }
 .main-content .weather-section .weekly-deg-current {
   width: 100%;
