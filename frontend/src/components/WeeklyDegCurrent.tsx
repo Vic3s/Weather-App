@@ -11,11 +11,12 @@ const WeeklyDegCurrent = () => {
             method: "get",
             url: 'http://localhost:5000/api/next-seven-days-data'
         }).then(response => setNextWeekData(response.data))
+        .catch(err => console.log(err))
     }
 
     useEffect(() => {
         getNextWeekDegs();
-    })
+    }, [])
 
     return (
         <div className='weekly-deg-current'>
@@ -29,7 +30,6 @@ const WeeklyDegCurrent = () => {
                 </div>
                 </div>
             ))}
-            
         </div>
     )
 

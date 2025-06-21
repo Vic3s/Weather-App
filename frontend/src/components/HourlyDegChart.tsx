@@ -6,7 +6,6 @@ const HourlyDegChart = () => {
 
     const[chartData, setChartData] = useState([]);
     const[hoursOfDay, setHoursOfDay] = useState<any[]>([])
-    const[weatherMetric, setWeatherMetric] = useState([])
     
     const getWeatherHourlyData = () => {
         axios({
@@ -17,9 +16,10 @@ const HourlyDegChart = () => {
 
     const getHoursData = () => {
         axios({
-            method: 'get',
+            method: "get",
             url: 'http://localhost:5000/api/current-hours-data',
-        }).then(response => setHoursOfDay(response.data));
+        }).then(response => setHoursOfDay(response.data))
+        .catch(err => console.log(err));
     }
 
     useEffect(() => {

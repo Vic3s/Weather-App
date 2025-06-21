@@ -8,7 +8,6 @@ const IndexPage = () => {
   const[cityName, setCityName] = useState("")
 
   const postWeatherForcastCity = (e: any) => {
-
     e.preventDefault();
     const data = {
       'cityName': cityName,
@@ -19,11 +18,12 @@ const IndexPage = () => {
           'Content-Type': 'application/json'
         }
       })
-    .then(response => setCityName(response.data))
+    .then(response => {
+      setCityName(response.data)
+      window.location.reload()
+    })
     .catch(err => console.log(err));
   }
-
-
 
   return (
     <>
@@ -32,7 +32,7 @@ const IndexPage = () => {
         <h1>Weather Forcast</h1>
       </div>
 
-      <form onSubmit={postWeatherForcastCity}>
+      <form onSubmit={(e) => {postWeatherForcastCity(e);}}>
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-md-6">

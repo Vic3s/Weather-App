@@ -68,11 +68,9 @@ public class WeatherData {
         return ResponseEntity.ok(cityName);
     }
     @GetMapping("/curr-time-weather")
-    public ResponseEntity<ArrayList<ObjectNode>> getCurrentWeatherInfo() {
+    public ResponseEntity<ObjectNode> getCurrentWeatherInfo() {
         ObjectMapper mapper = new ObjectMapper();
-        ArrayList<ObjectNode> response = new ArrayList<>();
-        ObjectNode dataC = mapper.createObjectNode();
-        ObjectNode dataF = mapper.createObjectNode();
+        ObjectNode response = mapper.createObjectNode();
 
         //api string
         String URL = "No Specified Value";
@@ -102,28 +100,14 @@ public class WeatherData {
         String time = weatherData.get("last_updated").asText().split(" ")[1];
         String condition = weatherData.get("condition").get("text").asText();
 
-        dataC.put("degrees", currTemperature);
-        dataC.put("rain", rainMm);
-        dataC.put("humidity", humidity);
-        dataC.put("wind", windSpeed);
-        dataC.put("dow", dayOfWeek);
-        dataC.put("time", time);
-        dataC.put("condition", condition);
+        response.put("degrees", currTemperature);
+        response.put("rain", rainMm);
+        response.put("humidity", humidity);
+        response.put("wind", windSpeed);
+        response.put("dow", dayOfWeek);
+        response.put("time", time);
+        response.put("condition", condition);
 
-
-        //Create data object for F°
-        Integer currTemperatureF = weatherData.get("temp_f").asInt();
-
-        dataF.put("degrees", currTemperatureF);
-        dataF.put("rain", rainMm);
-        dataF.put("humidity", humidity);
-        dataF.put("wind", windSpeed);
-        dataF.put("dow", dayOfWeek);
-        dataF.put("time", time);
-        dataF.put("condition", condition);
-
-        response.add(dataC);
-        response.add(dataF);
 
         return ResponseEntity.ok(response);
     }
